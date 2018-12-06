@@ -1,0 +1,83 @@
+<ion-header>
+        <ion-navbar color="dark">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+              </ion-col>
+              <ion-col col-8 class="header-title">
+                <!-- LIVE -->
+              </ion-col>
+              <ion-col>
+              </ion-col>
+              <button (click)="openLoginPage()" style="background: none;">
+                <ion-icon cli name="md-settings" style="font-size: 1.5em;" color="light"></ion-icon>
+              </button>
+            </ion-row>
+          </ion-grid>
+        </ion-navbar>
+        <div class="header-title">LIVE</div>
+      </ion-header>
+
+
+<ion-content padding>
+ 
+ 
+  <div style="width: 100%;height: auto;">
+    <div class="parent-row">
+        <button ion-button style="float: right;" (click)="scan()">Scan</button>
+    </div>
+
+    <ion-list *ngIf="isRegisterDevice">
+    
+      <ion-item *ngIf="isDeviceSelect">
+          <ion-label>Device</ion-label>
+          <ion-select [(ngModel)]="device_serial" #C (ionChange)="onDeviceSelect(C.value)" (click)="onDeviceSelect(C.value)">
+              <ion-option *ngFor="let item of devicesList" value="{{item.value}}#{{item.text}}">{{item.text}}</ion-option>
+          </ion-select>
+      </ion-item>
+
+      <ion-item *ngIf="isPWMSelect" >
+          <ion-label>PWM Support</ion-label>
+          <ion-select [(ngModel)]="pwm">
+            <ion-option *ngFor="let item of pwmsList" value="{{item.value}}">{{item.text}}</ion-option>
+          </ion-select>
+      </ion-item>
+    
+    </ion-list>
+
+    <ion-list radio-group *ngIf="isRegisterDevice">
+        <ion-list-header>
+            Avalaible Buttons
+        </ion-list-header>
+
+        <ion-item *ngFor="let item of mac_gpioList">
+            <ion-label>{{item.mac_gpio}}</ion-label>
+            <ion-radio value={{item.mac_gpio}} (click)="testMACGPIO(item)"></ion-radio>
+        </ion-item>
+    </ion-list>
+
+    <ion-list  *ngIf="isRegisterDevice">
+        <button ion-button (click)="registerDevice()">Register</button>
+    </ion-list>
+ 
+    <ion-list >
+ 
+      <ion-item-sliding *ngFor="let item of registeredDeviceList">
+
+          <ion-item>
+            {{item.device}}
+          </ion-item>
+
+          <ion-item-options>
+              <button ion-button icon-only #D value="{{item.mac_gpio}}" (click)="deleteRegisteredDevices(item)" danger>
+                  <ion-icon name="trash" ></ion-icon>
+              </button>
+          </ion-item-options>
+
+      </ion-item-sliding>
+
+  </ion-list>
+
+  </div>
+ 
+</ion-content>

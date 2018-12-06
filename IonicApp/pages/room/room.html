@@ -1,0 +1,86 @@
+<ion-header>
+  <ion-navbar color="dark">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+        </ion-col>
+        <ion-col col-8 class="header-title">
+          <!-- LIVE -->
+        </ion-col>
+        <ion-col>
+        </ion-col>
+        <button (click)="openLoginPage()" style="background: none;">
+          <ion-icon cli name="md-settings" style="font-size: 1.5em;" color="light"></ion-icon>
+        </button>
+      </ion-row>
+    </ion-grid>
+  </ion-navbar>
+  <div class="header-title">LIVE</div>
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-grid>
+    <ion-row>
+      <h3 style="width: 100%;">ROOM</h3>
+      <h6 style="margin-top: -5px;">FAVOURITES</h6>
+
+      <div class="parent-row">
+        <div class="child-1" *ngFor="let info of FirebaseProvider.room_fav_even_infos" (click)="openGenericRoom(info)">
+          <img src="../../assets/imgs/icons8-living-room-filled-50.png" class="child-img" />
+          <h6 class="child-label">{{info.custom_name}}</h6>
+          <h6 class="child-label">{{info.activeDevice}} devices are on</h6>
+        </div>
+      </div>
+
+      <ion-list *ngFor="let info of FirebaseProvider.room_fav_odd_infos" style="width: 100%;">
+        <ion-item (click)="openGenericRoom(info)" style="background-color: rgba(141, 128, 128, 0.63);height:50px;width:100%;border: 2px solid #1a2026;
+        margin-top: 1px;">
+          <img src="../../assets/imgs/icons8-shower-filled-50.png" class="but-img" />
+          <div class="but-text">
+            <h6 class="all-child-label">{{info.custom_name}}</h6>
+            <h6 class="all-child-label">{{info.activeDevice}} devices are on</h6>
+          </div>
+        </ion-item>
+      </ion-list>
+    </ion-row>
+    <ion-row style="margin-top: 15px;">
+      <h6>ALL</h6>
+      <div class="parent-row">
+        <ion-list *ngFor="let info of FirebaseProvider.room_infos">
+          <ion-item (click)="openGenericRoom(info)" style="background-color: rgba(141, 128, 128, 0.63);height:50px;width:100%;border: 2px solid #1a2026;
+          margin-top: 3px;">
+            <img src="../../assets/imgs/icons8-shower-filled-50.png" class="but-img" />
+            <div class="but-text">
+              <h6 class="all-child-label">{{info.custom_name}}</h6>
+              <h6 class="all-child-label">{{info.activeDevice}} devices are on</h6>
+            </div>
+          </ion-item>
+        </ion-list>
+      </div>
+    </ion-row>
+  </ion-grid>
+
+  <!-- <ion-list *ngFor="let info of FirebaseProvider.light_device_infos;let i=index">
+        <ion-item *ngIf="info.room == 'Kitchen'">
+          <ion-label>{{info.cust_device}} - {{info.state}}</ion-label>
+              
+              <ion-label>{{info.state}} -> {{info.checked}} {{toggle01}}</ion-label>
+              <ion-label *ngIf="info.checked">show</ion-label>
+              <ion-label *ngIf="!info.checked">hide</ion-label>
+              <ion-toggle [checked] = "info.checked"></ion-toggle>
+              <ion-toggle [(ngModel)]="FirebaseProvider.light_device_infos[i]['checked']" checked="FirebaseProvider.light_device_infos[i]['checked']" ></ion-toggle>
+        </ion-item>
+    </ion-list>    -->
+
+  <!-- <ion-item>
+      <ion-toggle  [(ngModel)]="toggle01"  (ionChange)="toggleSwitch($event)"></ion-toggle>
+      <ion-label>
+        With ngModel
+      </ion-label>
+      <ion-icon name='menu' item-start></ion-icon>
+    </ion-item> -->
+
+
+</ion-content>

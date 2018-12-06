@@ -1,0 +1,50 @@
+<ion-header>
+    <ion-navbar color="dark">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+          </ion-col>
+          <ion-col col-8 class="header-title">
+            <!-- LIVE -->
+          </ion-col>
+          <ion-col>
+          </ion-col>
+          <button (click)="openLoginPage()" style="background: none;">
+            <ion-icon cli name="md-settings" style="font-size: 1.5em;" color="light"></ion-icon>
+          </button>
+        </ion-row>
+      </ion-grid>
+    </ion-navbar>
+    <div class="header-title">LIVE</div>
+  </ion-header>
+
+
+<ion-content padding>
+<h3>SETTING</h3>
+<div style="width: 100%;height: auto;">
+  <div class="parent-row">
+    <div class="child-1" (click)="openSettingView('Room')">
+      <img src="../../assets/imgs/icons8-living-room-filled-50.png" class="child-img" />
+      <h6 class="child-label">Room</h6> 
+    </div>
+    <div class="child-1" (click)="openSettingView('Appliance')">
+        <img src="../../assets/imgs/icons8-bed-filled-50.png" class="child-img" />
+        <h6 class="child-label">Appliance</h6> 
+    </div>
+    <div style="clear: both;"></div>
+  </div>
+
+  <div class="parent-row">
+    <div class="child-1" (click)="openSettingView('User')">
+      <img src="../../assets/imgs/icons8-living-room-filled-50.png" class="child-img" />
+      <h6 class="child-label">User</h6> 
+    </div>
+    <div class="child-1" (click)="openSettingView('Mood')">
+        <img src="../../assets/imgs/icons8-bed-filled-50.png" class="child-img" />
+        <h6 class="child-label">Mood</h6> 
+    </div>
+    <div style="clear: both;"></div>
+  </div>
+    
+</div>
+</ion-content>

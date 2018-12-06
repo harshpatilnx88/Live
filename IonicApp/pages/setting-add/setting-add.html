@@ -1,0 +1,215 @@
+<ion-header>
+  <ion-navbar color="dark">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+        </ion-col>
+        <ion-col col-8 class="header-title">
+          <!-- LIVE -->
+        </ion-col>
+        <ion-col>
+        </ion-col>
+        <button (click)="openLoginPage()" style="background: none;">
+          <ion-icon cli name="md-settings" style="font-size: 1.5em;" color="light"></ion-icon>
+        </button>
+      </ion-row>
+    </ion-grid>
+  </ion-navbar>
+  <div class="header-title">LIVE</div>
+</ion-header>
+<ion-content padding>
+
+  <div *ngIf="action == 'Appliance'">
+    <ion-item>
+      <ion-label color="primary" floating>Device</ion-label>
+      <ion-input [(ngModel)]="device"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label color="primary" floating>Group</ion-label>
+      <ion-select [(ngModel)]="group" #C>
+        <ion-option *ngFor="let item of group_list" value="{{item.group}}">{{item.group}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label color="primary" floating>Dimming</ion-label>
+      <ion-select [(ngModel)]="dimming" #C>
+        <ion-option *ngFor="let item of dimming_list" value="{{item.value}}">{{item.value}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <button ion-button full large style="margin-top: 10px;" (click)="addDevice()">Add
+      </button>
+    </ion-item>
+  </div>
+  <!-- ---------------------------------------------------------------------------------------------------------- -->
+  <div *ngIf="action == 'Room'">
+    <ion-item>
+      <ion-label color="primary" floating>Room Type</ion-label>
+      <ion-select [(ngModel)]="room_type" #C>
+        <ion-option *ngFor="let item of room_type_list" value="{{item.type}}">{{item.type}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label color="primary" floating>Custom Room Name</ion-label>
+      <ion-input [(ngModel)]="custom_room_name"></ion-input>
+    </ion-item>
+    <ion-item>
+      <button ion-button full large style="margin-top: 10px;" (click)="addRoom()">Add
+      </button>
+    </ion-item>
+  </div>
+  <!-- ---------------------------------------------------------------------------------------------------------- -->
+  <div *ngIf="action == 'RoomSetting'">
+    <h1>{{custom_room_name}} RoomSetting
+      <ion-icon ios="ios-add-circle" md="md-add-circle" style="float: right;" (click)="scanGPIOs()" *ngIf="FirebaseProvider.setting_dumpGPIO_list?.length > 0"></ion-icon>
+    </h1>
+
+    <div style="margin-top: 5px;">
+      <div>
+        <h6 style="margin-top: 10px;">AC</h6>
+        <ion-list *ngFor="let info of FirebaseProvider.ac_device_infos">
+          <ion-item *ngIf="info.room == custom_room_name" style="background-color: rgba(141, 128, 128, 0.63);width:100%;padding-top:5px;padding-bottom: 5px;margin-top: 3px;">
+            <div style="float: left;">
+              <h6 style="margin-top: 2px;">{{info.cust_device}}</h6>
+            </div>
+            <div style="float: right;">
+              <ion-icon ios="ios-lock" md="md-lock" style="margin-left:5px;margin-right:5px;" [ngStyle]="{'color': info.lockColor}"
+                (click)="toggleLock(info);"></ion-icon>
+              <ion-icon ios="ios-remove-circle" md="md-remove-circle" (click)="unRegisterDevice(info);"></ion-icon>
+            </div>
+          </ion-item>
+        </ion-list>
+      </div>
+
+      <div>
+        <h6 style="margin-top: 10px;">FAN</h6>
+        <ion-list *ngFor="let info of FirebaseProvider.fan_device_infos">
+          <ion-item *ngIf="info.room == custom_room_name" style="background-color: rgba(141, 128, 128, 0.63);width:100%;padding-top:5px;padding-bottom: 5px;margin-top: 3px;">
+            <div style="float: left;">
+              <h6 style="margin-top: 2px;">{{info.cust_device}}</h6>
+            </div>
+            <div style="float: right;">
+              <ion-icon ios="ios-lock" md="md-lock" style="margin-left:5px;margin-right:5px;" [ngStyle]="{'color': info.lockColor}"
+                (click)="toggleLock(info);"></ion-icon>
+              <ion-icon ios="ios-remove-circle" md="md-remove-circle" (click)="unRegisterDevice(info);"></ion-icon>
+            </div>
+          </ion-item>
+        </ion-list>
+      </div>
+
+      <div>
+        <h6 style="margin-top: 10px;">LIGHTS</h6>
+        <ion-list *ngFor="let info of FirebaseProvider.light_device_infos">
+          <ion-item *ngIf="info.room == custom_room_name" style="background-color: rgba(141, 128, 128, 0.63);width:100%;padding-top:5px;padding-bottom: 5px;margin-top: 3px;">
+            <div style="float: left;">
+              <h6 style="margin-top: 2px;">{{info.cust_device}}</h6>
+            </div>
+            <div style="float: right;">
+              <ion-icon ios="ios-lock" md="md-lock" style="margin-left:5px;margin-right:5px;" [ngStyle]="{'color': info.lockColor}"
+                (click)="toggleLock(info);"></ion-icon>
+              <ion-icon ios="ios-remove-circle" md="md-remove-circle" (click)="unRegisterDevice(info);"></ion-icon>
+            </div>
+          </ion-item>
+        </ion-list>
+      </div>
+
+      <div>
+        <h6 style="margin-top: 10px;">RGB</h6>
+        <ion-list *ngFor="let info of FirebaseProvider.setting_RGB_list">
+          <ion-item *ngIf="info.custom_room_name == custom_room_name" style="background-color: rgba(141, 128, 128, 0.63);width:100%;padding-top:5px;padding-bottom: 5px;margin-top: 3px;">
+            <div style="float: left;">
+              <h6 style="margin-top: 2px;">{{info.cust_device}}</h6>
+            </div>
+            <div style="float: right;">
+              <ion-icon ios="ios-lock" md="md-lock" style="margin-left:5px;margin-right:5px;" [ngStyle]="{'color': info.lockColor}"
+                (click)="toggleLock(info);"></ion-icon>
+              <ion-icon ios="ios-remove-circle" md="md-remove-circle" (click)="unRegisterDevice(info);"></ion-icon>
+            </div>
+          </ion-item>
+        </ion-list>
+      </div>
+
+    </div>
+  </div>
+  <!-- ---------------------------------------------------------------------------------------------------------- -->
+  <div *ngIf="action == 'RoomSettingScan'">
+    <h1>RoomSettingScan</h1>
+    <ion-item>
+      <ion-label color="primary" floating>Select Switch</ion-label>
+      <ion-select [(ngModel)]="mac_gpio" #C>
+        <ion-option *ngFor="let item of FirebaseProvider.setting_dumpGPIO_list" value="{{item.mac_gpio}}">{{item.mac_gpio}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label color="primary" floating>Device Type</ion-label>
+      <ion-select [(ngModel)]="device" #C>
+        <ion-option *ngFor="let item of FirebaseProvider.setting_device_list" value="{{item.device}}">{{item.device}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label color="primary" floating>Device</ion-label>
+      <ion-input [(ngModel)]="custom_device_name"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label color="primary" floating>Dimming</ion-label>
+      <ion-select [(ngModel)]="dimming" #C>
+        <ion-option *ngFor="let item of dimming_list" value="{{item.value}}">{{item.value}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <button ion-button full large style="margin-top: 10px;" (click)="addRegisterDevice()">Add
+      </button>
+    </ion-item>
+  </div>
+  <!-- ---------------------------------------------------------------------------------------------------------- -->
+  <div *ngIf="action == 'Mood'">
+    <h1>Mood</h1>
+    <ion-item>
+      <ion-label color="primary" floating>Mood Name</ion-label>
+      <ion-input [(ngModel)]="mood_name"></ion-input>
+    </ion-item>
+    <ion-item>
+      <button ion-button full large style="margin-top: 10px;" (click)="addMood()">Add
+      </button>
+    </ion-item>
+  </div>
+  <!-- ---------------------------------------------------------------------------------------------------------- -->
+  <div *ngIf="action == 'MoodRoomDeviceSetting'">
+    <h1>{{custom_room_name}} MoodRoomDeviceSetting
+    </h1>
+
+    <div style="margin-top: 5px;" *ngFor="let mood_info of FirebaseProvider.setting_mood_list">
+      <div *ngIf="mood_info.mood == mood_name && mood_info.custom_name == custom_room_name">
+        <h6 style="margin-top: 10px;">AC</h6>
+        <ion-list *ngFor="let info of mood_info.ac_device_infos">
+          <ion-item *ngIf="info.room == custom_room_name" style="background-color: rgba(141, 128, 128, 0.63);width:100%;padding-top:5px;padding-bottom: 5px;margin-top: 3px;">
+            <ion-label>{{info.cust_device}}</ion-label>
+            <ion-toggle [checked]="info.checked" (ionChange)="toggleSwitchMood($event , info)"></ion-toggle>
+          </ion-item>
+        </ion-list>
+      </div>
+
+      <div *ngIf="mood_info.mood == mood_name && mood_info.custom_name == custom_room_name">
+        <h6 style="margin-top: 10px;">FAN</h6>
+        <ion-list *ngFor="let info of mood_info.fan_device_infos">
+          <ion-item *ngIf="info.room == custom_room_name" style="background-color: rgba(141, 128, 128, 0.63);width:100%;padding-top:5px;padding-bottom: 5px;margin-top: 3px;">
+            <ion-label>{{info.cust_device}}</ion-label>
+            <ion-toggle [checked]="info.checked" (ionChange)="toggleSwitchMood($event , info)"></ion-toggle>
+          </ion-item>
+        </ion-list>
+      </div>
+
+      <div *ngIf="mood_info.mood == mood_name && mood_info.custom_name == custom_room_name">
+        <h6 style="margin-top: 10px;">LIGHTS</h6>
+        <ion-list *ngFor="let info of mood_info.light_device_infos">
+          <ion-item *ngIf="info.room == custom_room_name" style="background-color: rgba(141, 128, 128, 0.63);width:100%;padding-top:5px;padding-bottom: 5px;margin-top: 3px;">
+            <ion-label>{{info.cust_device}}</ion-label>
+            <ion-toggle [checked]="info.checked" (ionChange)="toggleSwitchMood($event , info)"></ion-toggle>
+          </ion-item>
+        </ion-list>
+      </div>
+
+    </div>
+  </div>
+  <!-- ---------------------------------------------------------------------------------------------------------- -->
+</ion-content>

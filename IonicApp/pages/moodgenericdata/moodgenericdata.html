@@ -1,0 +1,120 @@
+<!--
+  Generated template for the MoodgenericdataPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>moodgenericdata</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content  >
+  <div  style="background-color: white;">
+    <ion-segment [(ngModel)]="pet">
+      <ion-segment-button value="kittens">
+        Kittens
+      </ion-segment-button>
+      <ion-segment-button value="puppies">
+        Puppies
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+  
+  <div [ngSwitch]="pet">
+    <ion-list *ngSwitchCase="'puppies'" >
+      <ion-list radio-group>
+        
+        <ion-item>
+          <ion-label>Relaxing</ion-label>
+          <ion-radio checked="true" value="Relaxing"></ion-radio>
+        </ion-item>
+      
+        <ion-item>
+          <ion-label>Atmosoheric</ion-label>
+          <ion-radio value="Atmosoheric"></ion-radio>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Relaxing(Bright)</ion-label>
+          <ion-radio  value="go"></ion-radio>
+        </ion-item>
+      
+        <ion-item>
+          <ion-label>Bright</ion-label>
+          <ion-radio value="Bright"></ion-radio>
+        </ion-item>
+      
+        <ion-item>
+          <ion-label>Off</ion-label>
+          <ion-radio value="Off"></ion-radio>
+        </ion-item>
+        
+      </ion-list>
+    </ion-list>
+  
+    <ion-list *ngSwitchCase="'kittens'">
+      <div style=" margin-left: auto;margin-right: auto;width: 93%;height: 40px;background-color: white;">     
+        <div><h4 style="color: black;margin-left: 25px;">LIGHT 1</h4></div>  
+        <img src="../../assets/imgs/icons8-idea-filled-50.png"   style="height: 35px;float:right;margin-top: -30px;"/>
+        <ion-list> 
+         <ion-item>
+           <ion-range min="20" max="80" step="2" [(ngModel)]="brightness1" style="margin-top: 0px;">
+             <ion-icon small range-left name="sunny"></ion-icon>
+             <ion-icon range-right name="sunny"></ion-icon>
+           </ion-range>
+          </ion-item>  
+   </ion-list>
+      </div>
+     
+     <br><br><br>
+      <div style=" margin-left: auto;margin-right: auto;width: 93%;height: 40px;background-color: white;">     
+        <div><h4 style="color: black;margin-left: 25px;">LIGHT 2</h4></div>  
+        <img src="../../assets/imgs/icons8-idea-filled-50.png"   style="height: 35px;float:right;margin-top: -30px;"/>
+        <ion-list> 
+         <ion-item>
+           <ion-range min="20" max="80" step="2" [(ngModel)]="brightness2" style="margin-top: 0px;">
+             <ion-icon small range-left name="sunny"></ion-icon>
+             <ion-icon range-right name="sunny"></ion-icon>
+           </ion-range>
+          </ion-item>  
+   </ion-list>
+      </div>
+
+      
+     <br><br><br>
+     <div style=" margin-left: auto;margin-right: auto;width: 93%;height: 40px;background-color: white;">     
+       <div><h4 style="color: black;margin-left: 25px;">LIGHT 3</h4></div>  
+       <img src="../../assets/imgs/icons8-idea-filled-50.png"   style="height: 35px;float:right;margin-top: -30px;"/>
+       <ion-list> 
+        <ion-item>
+          <ion-range min="20" max="80" step="2" [(ngModel)]="brightness3" style="margin-top: 0px;">
+            <ion-icon small range-left name="sunny"></ion-icon>
+            <ion-icon range-right name="sunny"></ion-icon>
+          </ion-range>
+         </ion-item>  
+  </ion-list>
+     </div>
+
+     
+     <br><br><br>
+      <div style=" margin-left: auto;margin-right: auto;width: 93%;height: 40px;background-color: white;">     
+        <div><h4 style="color: black;margin-left: 25px;">LIGHT 4</h4></div>  
+        <img src="../../assets/imgs/icons8-idea-filled-50.png"   style="height: 35px;float:right;margin-top: -30px;"/>
+        <ion-list> 
+         <ion-item>
+           <ion-range min="20" max="80" step="2" [(ngModel)]="brightness4" style="margin-top: 0px;">
+             <ion-icon small range-left name="sunny"></ion-icon>
+             <ion-icon range-right name="sunny"></ion-icon>
+           </ion-range>
+          </ion-item>  
+   </ion-list>
+      </div>
+
+    </ion-list>
+  </div>
+</ion-content>

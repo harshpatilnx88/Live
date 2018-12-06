@@ -1,0 +1,154 @@
+<ion-header>
+  <ion-navbar color="dark">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+        </ion-col>
+        <ion-col col-8 class="header-title">
+          <!-- LIVE -->
+        </ion-col>
+        <ion-col>
+        </ion-col>
+        <button (click)="openLoginPage()" style="background: none;">
+          <ion-icon cli name="md-settings" style="font-size: 1.5em;" color="light"></ion-icon>
+        </button>
+      </ion-row>
+    </ion-grid>
+  </ion-navbar>
+  <div class="header-title">LIVE</div>
+</ion-header>
+
+
+<ion-content padding>
+
+  <div *ngIf="group == 'LIGHTING'">
+    <ion-list *ngFor="let info of FirebaseProvider.light_device_infos">
+      <ion-item *ngIf="info.room == room" style="background-color: rgba(141, 128, 128, 0.63);height:50px;width:100%; border: 5px solid #1a2026;
+      margin-top: 3px;">
+        <ion-label>{{info.cust_device}}</ion-label>
+        <ion-label style="text-align:right;">
+          <ion-icon ios="ios-timer" md="md-timer" (click)="viewSchedular(info);"></ion-icon>
+        </ion-label>
+        <ion-toggle [checked]="info.checked" (ionChange)="toggleSwitch($event , info)" [disabled]="info.freeze"></ion-toggle>
+      </ion-item>
+      <ion-item *ngIf="info.room == room && info.pwm_support == 'TRUE'" style="background-color: rgba(141, 128, 128, 0.63);height:50px;width:100%; border: 5px solid #1a2026;
+      margin-top: 3px;">
+        <ion-range min="0" max="100" step="1" debounce="100" color="danger" (ionChange)="rangeSlider($event , info)" pin="true"
+          [ngModel]="info.pwm" ></ion-range>
+      </ion-item>
+    </ion-list>
+  </div>
+  <div *ngIf="group == 'AC'">
+    <ion-list *ngFor="let info of FirebaseProvider.ac_device_infos">
+      <ion-item *ngIf="info.room == room" style="background-color: rgba(141, 128, 128, 0.63);height:50px;width:100%; border: 5px solid #1a2026;
+      margin-top: 3px;">
+        <ion-label>{{info.cust_device}}</ion-label>
+        <ion-label style="text-align:right;">
+          <ion-icon ios="ios-timer" md="md-timer" (click)="viewSchedular(info);"></ion-icon>
+        </ion-label>
+        <ion-toggle [checked]="info.checked" (ionChange)="toggleSwitch($event , info)" [disabled]="info.freeze"></ion-toggle>
+      </ion-item>
+    </ion-list>
+  </div>
+  <div *ngIf="group == 'FAN'">
+    <ion-list *ngFor="let info of FirebaseProvider.fan_device_infos">
+      <ion-item *ngIf="info.room == room" style="background-color: rgba(141, 128, 128, 0.63);height:50px;width:100%; border: 5px solid #1a2026;
+      margin-top: 3px;">
+        <ion-label>{{info.cust_device}}</ion-label>
+        <ion-label style="text-align:right;">
+          <ion-icon ios="ios-timer" md="md-timer" (click)="viewSchedular(info);"></ion-icon>
+        </ion-label>
+        <ion-toggle [checked]="info.checked" (ionChange)="toggleSwitch($event , info)" [disabled]="info.freeze"></ion-toggle>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <div *ngIf="group == 'viewSchedular'">
+    <h3>
+      <ion-icon ios="ios-add-circle" md="md-add-circle" style="float: right;" (click)="addSchedular(info);"></ion-icon>
+    </h3>
+
+    <ion-list *ngFor="let info of schedularData">
+      <ion-item-sliding style="background-color: rgba(141, 128, 128, 0.63);width:100%;padding-top:5px;padding-bottom: 5px;margin-top: 3px;">
+        <ion-item style="background-color: transparent;">
+          <ion-label>{{info.schedularName}}</ion-label>
+          <ion-toggle [checked]="info.checked" (ionChange)="toggleSwitchDeviceSchedular($event , info)"></ion-toggle>
+        </ion-item>
+        <ion-item-options style="border: none !important;">
+          <button ion-button expandable (click)="deleteDeviceSchedularData(info)">Delete</button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+  </div>
+
+  <div *ngIf="group == 'addSchedular'">
+    <ion-item>
+      <ion-label color="primary" floating>Schedular Name</ion-label>
+      <ion-input [(ngModel)]="schedularName"></ion-input>
+    </ion-item>
+
+    <h1>On Time</h1>
+    <ion-item style="background-color: rgba(141, 128, 128, 0.63);width:100%;padding-top:5px;padding-bottom: 5px;margin-top: 3px;">
+      <ion-label color="white" floating>Hours</ion-label>
+      <ion-select [(ngModel)]="onTimeHourVal" #C>
+        <ion-option *ngFor="let item of hours" value="{{item.hour}}">{{item.hour}}</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item style="background-color: rgba(141, 128, 128, 0.63);width:100%;padding-top:5px;padding-bottom: 5px;margin-top: 3px;">
+      <ion-label color="white" floating>Minute</ion-label>
+      <ion-select [(ngModel)]="onTimeMinuteVal" #C>
+        <ion-option *ngFor="let item of minutes" value="{{item.minute}}">{{item.minute}}</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <h1>Off Time</h1>
+    <ion-item style="background-color: rgba(141, 128, 128, 0.63);width:100%;padding-top:5px;padding-bottom: 5px;margin-top: 3px;">
+      <ion-label color="white" floating>Hours</ion-label>
+      <ion-select [(ngModel)]="offTimeHourVal" #C>
+        <ion-option *ngFor="let item of hours" value="{{item.hour}}">{{item.hour}}</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item style="background-color: rgba(141, 128, 128, 0.63);width:100%;padding-top:5px;padding-bottom: 5px;margin-top: 3px;">
+      <ion-label color="white" floating>Minute</ion-label>
+      <ion-select [(ngModel)]="offTimeMinuteVal" #C>
+        <ion-option *ngFor="let item of minutes" value="{{item.minute}}">{{item.minute}}</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item style="background-color: rgba(141, 128, 128, 0.63);width:100%;padding-top:5px;padding-bottom: 5px;margin-top: 3px;">
+      <ion-label color="white" floating>Days</ion-label>
+      <ion-select [(ngModel)]="dayVal" multiple>
+        <ion-option *ngFor="let item of days" [value]="item.day">{{item.day}}</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item style="background-color:transparent;">
+      <button ion-button full large style="margin-top: 10px;" (click)="saveAddSchedular()">Save </button>
+    </ion-item>
+  </div>
+
+  <div *ngIf="group == 'RGB'">
+    <h3>RGB Setting</h3>
+
+    <div style="margin-top:10px;">
+
+      <ion-item style="background-color: rgba(141, 128, 128, 0.63);height:50px;width:100%; border: 5px solid #1a2026;
+        margin-top: 3px;">
+        <ion-label>Single Color</ion-label>
+        <ion-toggle [checked]="RGBData.receiveSingleColorRequest" (ionChange)="singleColorToggleSwitch($event , info)"></ion-toggle>
+      </ion-item>
+
+      <ion-item style="background-color: rgba(141, 128, 128, 0.63);height:50px;width:100%; border: 5px solid #1a2026;
+      margin-top: 3px;">
+        <ion-label>Musical Mode</ion-label>
+        <ion-toggle [checked]="RGBData.receiveMusicalModeRequest" (ionChange)="musicalModeToggleSwitch($event , info)"></ion-toggle>
+      </ion-item>
+
+      <div class="center">
+        <input class="rainbow" type="range" min="0" max="360" [(ngModel)]="rainbowVal" (change)="rainbow($event)" style="background-color: transparent;" />
+      </div>
+    </div>
+  </div>
+</ion-content>

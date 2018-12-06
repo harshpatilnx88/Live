@@ -1,0 +1,96 @@
+<ion-header>
+  <ion-navbar color="dark">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+        </ion-col>
+        <ion-col col-8 class="header-title">
+          <!-- LIVE -->
+        </ion-col>
+        <ion-col>
+        </ion-col>
+        <button (click)="openLoginPage()" style="background: none;">
+          <ion-icon cli name="md-settings" style="font-size: 1.5em;" color="light"></ion-icon>
+        </button>
+      </ion-row>
+    </ion-grid>
+  </ion-navbar>
+  <div class="header-title">LIVE</div>
+</ion-header>
+
+
+<ion-content padding>
+  <h3>HOME</h3>
+  <h6 style="margin-top: -5px;">WHOLE HOUSE</h6>
+  <div style="width: 100%;height: auto;">
+    <div class="parent-row">
+      <h1>Mood</h1>
+      <div class="child-1" *ngFor="let info of moodinfo" (click)="toggleWholeHouseMoodSelector(info.checked , info)">
+        <img src="../../assets/imgs/icons8-living-room-filled-50.png" class="child-img" />
+        <h6 class="child-label">{{info.mood}}</h6>
+        <h6 class="child-label">
+          <ion-label>{{info.checked}}</ion-label>
+        </h6>
+      </div>
+    </div>
+    <!--
+    <div class="parent-row">
+      <div class="child-1" (click)="openHomeGenericPage('Bed Room')">
+        <div style="margin-left:14px;margin-top:10px;width:70px;height: 70px;background-color: rgba(141, 128, 128, 0.801);border: 1px soild black;border-radius: 50px;">
+          <img src="../../assets/imgs/icons8-curtains-filled-50.png" style="margin-left:15px;margin-top: 13px;width:40px;" />
+        </div>
+        <p class="child-label1">Curtain</p>
+        <h6 class="child-label2">Curtain Overview</h6>
+        <p class="child-label3">On in 12 rooms</p>
+      </div>
+      <div class="child-2" (click)="openHomeGenericPage('Master BedRoom')">
+        <div style="margin-left:14px;margin-top:10px;width:70px;height: 70px;background-color: rgba(141, 128, 128, 0.801);border: 1px soild black;border-radius: 50px;">
+          <img src="../../assets/imgs/icons8-home-page-filled-50.png" style="margin-left:15px;margin-top: 13px;width:40px;" />
+        </div>
+        <p class="child-label1">Garage</p>
+        <h6 class="child-label2">Garage Overview</h6>
+        <p class="child-label3">On in 12 rooms</p>
+      </div>
+      <div style="clear: both;"></div>
+    </div>
+    <div class="parent-row">
+      <div class="child-1" (click)="openHomeGenericPage('Living Room')">
+        <div style="margin-left:14px;margin-top:10px;width:70px;height: 70px;background-color: rgba(141, 128, 128, 0.801);border: 1px soild black;border-radius: 50px;">
+          <img src="../../assets/imgs/icons8-home-page-filled-50.png" style="margin-left:15px;margin-top: 13px;width:40px;" />
+        </div>
+        <p class="child-label1">Lighting</p>
+        <h6 class="child-label2">Night</h6>
+        <p class="child-label3">On in 12 rooms</p>
+      </div>
+      <div class="child-2" (click)="openHomeGenericPage('Bed Room')">
+        <div style="margin-left:14px;margin-top:10px;width:70px;height: 70px;background-color: rgba(141, 128, 128, 0.801);border: 1px soild black;border-radius: 50px;">
+          <img src="../../assets/imgs/icons8-home-page-filled-50.png" style="margin-left:15px;margin-top: 13px;width:40px;" />
+        </div>
+        <p class="child-label1">Lighting</p>
+        <h6 class="child-label2">All Out</h6>
+        <p class="child-label3">On in 12 rooms</p>
+      </div>
+      <div style="clear: both;"></div>
+    </div>
+
+    <div class="parent-row">
+      <div class="child-1" (click)="openHomeGenericPage('Kitchen')">
+        <div style="margin-left:14px;margin-top:10px;width:70px;height: 70px;background-color: rgba(141, 128, 128, 0.801);border: 1px soild black;border-radius: 50px;">
+          <img src="../../assets/imgs/icons8-home-page-filled-50.png" style="margin-left:15px;margin-top: 13px;width:40px;" />
+        </div>
+        <p class="child-label1">Lighting</p>
+        <h6 class="child-label2">Away</h6>
+        <p class="child-label3">On in 12 rooms</p>
+      </div>
+      <div class="child-2" (click)="openHomeGenericPage('SUHAS')">
+        <div style="margin-left:14px;margin-top:10px;width:70px;height: 70px;background-color: rgba(141, 128, 128, 0.801);border: 1px soild black;border-radius: 50px;">
+          <img src="../../assets/imgs/icons8-home-page-filled-50.png" style="margin-left:15px;margin-top: 13px;width:40px;" />
+        </div>
+        <p class="child-label1">Lighting</p>
+        <h6 class="child-label2">Entertaining</h6>
+        <p class="child-label3">On in 12 rooms</p>
+      </div>
+      <div style="clear: both;"></div>
+    </div> -->
+  </div>
+</ion-content>

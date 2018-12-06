@@ -1,0 +1,118 @@
+<ion-header>
+  <ion-navbar color="dark">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+        </ion-col>
+        <ion-col col-8 class="header-title">
+          <!-- LIVE -->
+        </ion-col>
+        <ion-col>
+        </ion-col>
+        <button (click)="openLoginPage()" style="background: none;">
+          <ion-icon cli name="md-settings" style="font-size: 1.5em;" color="light"></ion-icon>
+        </button>
+      </ion-row>
+    </ion-grid>
+  </ion-navbar>
+  <div class="header-title">LIVE</div>
+</ion-header>
+
+<ion-content padding>
+
+  <h3>{{room.custom_name}}
+    <ion-icon name="star" style="float: right;cursor: pointer;color:yellow" *ngIf="favourite_color_flag" (click)="makeFavourite(room)"></ion-icon>
+    <ion-icon name="star" style="float: right;cursor: pointer;color:white" *ngIf="!favourite_color_flag" (click)="makeFavourite(room)"></ion-icon>
+  </h3>
+
+  <div style="float: right;cursor: pointer;" (click)="openMoodSelector()">
+    <h4>MOOD</h4>
+  </div>
+
+  <ion-list>
+
+    <ion-item *ngFor="let item of registeredDeviceList">
+      <ion-label (click)="openDevice(item)">{{item.device}} </ion-label>
+    </ion-item>
+
+  </ion-list>
+
+  <div style="width: 100%;height: auto;">
+
+    <div *ngFor="let info of FirebaseProvider.room_infos">
+      <div style="margin-top: 5px;" *ngIf="info.custom_name == room.custom_name">
+
+        <div *ngIf="info.ac_flag > 0" (click)="openRoomDeviceGenericData('AC')">
+          <h6 style="margin-top: 10px;">AC</h6>
+          <ion-item style="background-color: rgba(141, 128, 128, 0.63);height:50px;width:100%;">
+            <img src="../../assets/imgs/icons8-shower-filled-50.png" class="but-img" />
+            <div class="but-text">
+              <h6 class="all-child-label">AC</h6>
+              <h6 class="all-child-label">{{info.acActive}} devices are on</h6>
+            </div>
+          </ion-item>
+        </div>
+
+        <div *ngIf="info.fan_flag > 0" (click)="openRoomDeviceGenericData('FAN')">
+          <h6 style="margin-top: 10px;">FAN</h6>
+          <ion-item style="background-color: rgba(141, 128, 128, 0.63);height:50px;width:100%;">
+            <img src="../../assets/imgs/icons8-shower-filled-50.png" class="but-img" />
+            <div class="but-text">
+              <h6 class="all-child-label">FAN</h6>
+              <h6 class="all-child-label">{{info.fanActive}} devices are on</h6>
+            </div>
+          </ion-item>
+        </div>
+
+        <div *ngIf="info.light_flag > 0" (click)="openRoomDeviceGenericData('LIGHTING')">
+          <h6 style="margin-top: 10px;">LIGHTS</h6>
+          <ion-item style="background-color: rgba(141, 128, 128, 0.63);height:50px;width:100%;">
+            <img src="../../assets/imgs/icons8-shower-filled-50.png" class="but-img" />
+            <div class="but-text">
+              <h6 class="all-child-label">LIGHTS</h6>
+              <h6 class="all-child-label">{{info.lightActive}} devices are on</h6>
+            </div>
+          </ion-item>
+        </div>
+
+        <div *ngIf="info.shading_flag > 0" (click)="openRoomDeviceGenericData('CURTAINS')">
+          <h6 style="margin-top: 10px;">CURTAINS</h6>
+          <ion-item style="background-color: rgba(141, 128, 128, 0.63);height:50px;width:100%;">
+            <img src="../../assets/imgs/icons8-shower-filled-50.png" class="but-img" />
+            <div class="but-text">
+              <h6 class="all-child-label">CURTAINS</h6>
+              <h6 class="all-child-label">{{info.shadingActive}} devices are on</h6>
+            </div>
+          </ion-item>
+        </div>
+
+        <div *ngIf="info.ent_flag > 0" (click)="openRoomDeviceGenericData('Entertaiment')">
+          <h6 style="margin-top: 10px;">Entertainment</h6>
+          <ion-item style="background-color: rgba(141, 128, 128, 0.63);height:50px;width:100%;">
+            <img src="../../assets/imgs/icons8-shower-filled-50.png" class="but-img" />
+            <div class="but-text">
+              <h6 class="all-child-label">Entertainment</h6>
+              <h6 class="all-child-label">{{info.entActive}} devices are on</h6>
+            </div>
+          </ion-item>
+        </div>
+
+        <div>
+          <h6 style="margin-top: 10px;">RGB</h6>
+          <ion-list *ngFor="let info of FirebaseProvider.setting_RGB_list">
+            <ion-item (click)="openRoomRGBDeviceGenericData('RGB',info )" *ngIf="info.custom_room_name == room.custom_name"
+              style="background-color: rgba(141, 128, 128, 0.63);width:100%;padding-top:5px;padding-bottom: 5px;margin-top: 3px;">
+              <img src="../../assets/imgs/icons8-shower-filled-50.png" class="but-img" />
+              <div class="but-text">
+                <h6 class="all-child-label">RGB</h6>
+                <h6 class="all-child-label"> devices are on</h6>
+              </div>
+            </ion-item>
+          </ion-list>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</ion-content>

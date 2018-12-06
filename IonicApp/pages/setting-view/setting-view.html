@@ -1,0 +1,141 @@
+<ion-header>
+  <ion-navbar color="dark">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+        </ion-col>
+        <ion-col col-8 class="header-title">
+          <!-- LIVE -->
+        </ion-col>
+        <ion-col>
+        </ion-col>
+        <button (click)="openLoginPage()" style="background: none;">
+          <ion-icon cli name="md-settings" style="font-size: 1.5em;" color="light"></ion-icon>
+        </button>
+      </ion-row>
+    </ion-grid>
+  </ion-navbar>
+  <div class="header-title">LIVE</div>
+</ion-header>
+
+<ion-content padding>
+
+  <div *ngIf="action == 'Appliance'">
+    <h3>{{action}}
+      <ion-icon ios="ios-add-circle" md="md-add-circle" style="float: right;" (click)="addView()"></ion-icon>
+    </h3>
+    <ion-list *ngFor="let info of FirebaseProvider.setting_device_list">
+      <ion-item style="background-color: rgba(141, 128, 128, 0.63);width:100%;padding-top:5px;padding-bottom: 5px;margin-top: 3px;">
+        <div style="width:90%;float: left;">
+          <h6>{{info.device}}</h6>
+        </div>
+        <div style="width:10%;float: left;">
+          <ion-icon ios="ios-remove-circle" md="md-remove-circle" (click)="deleteDevice(info);"></ion-icon>
+        </div>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <div *ngIf="action == 'Room'">
+    <h3>{{action}}
+      <ion-icon ios="ios-add-circle" md="md-add-circle" style="float: right;" (click)="addView()"></ion-icon>
+    </h3>
+    <ion-list *ngFor="let info of FirebaseProvider.room_infos">
+      <ion-item style="background-color: rgba(141, 128, 128, 0.63);width:100%;padding-top:5px;padding-bottom: 5px;margin-top: 3px;">
+        <div style="float: left;">
+          <h6>{{info.custom_name}}</h6>
+        </div>
+        <div style="float: right;">
+          <ion-icon ios="ios-settings" md="md-settings" style="float: left;margin-right: 10px;" (click)="openRoomSetting(info)"></ion-icon>
+          <ion-icon ios="ios-remove-circle" md="md-remove-circle" style="float: left;" (click)="deleteRoom(info);"></ion-icon>
+        </div>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <div *ngIf="action == 'Mood'">
+    <h3>{{action}}
+      <ion-icon ios="ios-add-circle" md="md-add-circle" style="float: right;" (click)="addView()"></ion-icon>
+    </h3>
+    <ion-list *ngFor="let info of moodinfo">
+      <ion-item style="background-color: rgba(141, 128, 128, 0.63);width:100%;padding-top:5px;padding-bottom: 5px;margin-top: 3px;">
+        <div style="float: left;">
+          <h6>{{info.mood}}</h6>
+        </div>
+        <div style="float: right;">
+          <ion-icon ios="ios-settings" md="md-settings" style="float: left;margin-right: 10px;" (click)="openMoodRoomSetting(info)"></ion-icon>
+          <ion-icon ios="ios-remove-circle" md="md-remove-circle" style="float: left;" (click)="deleteMood(info);"></ion-icon>
+        </div>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <div *ngIf="action == 'MoodRoomSetting'">
+    <h3>{{action}}
+    </h3>
+    <ion-list *ngFor="let info of FirebaseProvider.setting_mood_list">
+      <ion-item style="background-color: rgba(141, 128, 128, 0.63);width:100%;padding-top:5px;padding-bottom: 5px;margin-top: 3px;"
+        *ngIf="info.mood == mood && info.custom_name">
+        <div style="float: left;">
+          <h6>{{info.custom_name}}</h6>
+        </div>
+        <div style="float: right;">
+          <ion-icon ios="ios-settings" md="md-settings" style="float: left;margin-right: 10px;" (click)="openMoodRoomDeviceSetting(info, info.custom_name, info.room_type)"></ion-icon>
+        </div>
+      </ion-item>
+    </ion-list>
+
+    <h1>Schedule
+      <ion-icon ios="ios-add-circle" md="md-add-circle" style="float: right;" (click)="addSchedule(mood)"></ion-icon>
+    </h1>
+
+    <ion-list *ngFor="let info of schedularData">
+      <ion-item-sliding style="background-color: rgba(141, 128, 128, 0.63);width:100%;padding-top:5px;padding-bottom: 5px;margin-top: 3px;">
+        <ion-item style="background-color: transparent;">
+          <ion-label>{{info.schedularName}}</ion-label>
+          <ion-toggle [checked]="info.checked" (ionChange)="toggleSwitchSchedular($event , info)"></ion-toggle>
+        </ion-item>
+        <ion-item-options style="border: none !important;">
+          <button ion-button expandable (click)="deleteSchedularData(info)">Delete</button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+  </div>
+
+  <div *ngIf="action == 'MoodRoomSettingSchedular'">
+    <h3>{{action}}
+    </h3>
+
+    <ion-item>
+      <ion-label color="primary" floating>Schedular Name</ion-label>
+      <ion-input [(ngModel)]="schedularName"></ion-input>
+    </ion-item>
+
+    <ion-item style="background-color: rgba(141, 128, 128, 0.63);width:100%;padding-top:5px;padding-bottom: 5px;margin-top: 3px;">
+      <ion-label color="white" floating>Hours</ion-label>
+      <ion-select [(ngModel)]="hourVal" #C>
+        <ion-option *ngFor="let item of hours" value="{{item.hour}}">{{item.hour}}</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item style="background-color: rgba(141, 128, 128, 0.63);width:100%;padding-top:5px;padding-bottom: 5px;margin-top: 3px;">
+      <ion-label color="white" floating>Minute</ion-label>
+      <ion-select [(ngModel)]="minuteVal" #C>
+        <ion-option *ngFor="let item of minutes" value="{{item.minute}}">{{item.minute}}</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item style="background-color: rgba(141, 128, 128, 0.63);width:100%;padding-top:5px;padding-bottom: 5px;margin-top: 3px;">
+      <ion-label color="white" floating>Days</ion-label>
+      <ion-select [(ngModel)]="dayVal" multiple>
+        <ion-option *ngFor="let item of days" [value]="item.day">{{item.day}}</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item style="background-color:transparent;">
+      <button ion-button full large style="margin-top: 10px;" (click)="saveMoodRoomSettingSchedular()">Save </button>
+    </ion-item>
+
+  </div>
+
+</ion-content>
