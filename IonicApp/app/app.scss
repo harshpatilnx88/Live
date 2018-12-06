@@ -1,0 +1,170 @@
+// http://ionicframework.com/docs/theming/
+
+
+// App Global Sass
+// --------------------------------------------------
+// Put style rules here that you want to apply globally. These
+// styles are for the entire app and not just one component.
+// Additionally, this file can be also used as an entry point
+// to import other Sass files to be included in the output CSS.
+//
+// Shared Sass variables, which can be used to adjust Ionic's
+// default Sass variables, belong in "theme/variables.scss".
+//
+// To declare rules for a specific mode, create a child rule
+// for the .md, .ios, or .wp mode classes. The mode class is
+// automatically applied to the <body> element in the app.
+h1{
+color:white;
+}
+h2{
+color:white;
+}
+h3{
+color:white;
+}
+h4{
+color:white;
+}
+h5{
+color:white;
+}
+h6{
+color:white;
+}
+p{
+color:white;
+}
+.header{
+// border-bottom: 1px solid #01ebc2 !important;
+background-color: #f8f8f8 !important;
+.header-title{
+text-align: center !important;
+font-size: 2rem !important;
+font-weight: 600 !important;
+color:white !important;
+pointer-events: none !important;
+margin-top: -33px;
+position: absolute;
+width: 100%;
+}
+}
+
+.parent-row {
+width: 100%;
+height: 170px;
+
+.child-1{
+width: 50%;
+height: 100%;
+float: left;
+background-color: rgba(141, 128, 128, 0.63);
+background-clip: padding-box;
+padding-right: 2px; 
+border: 2px solid #1a2026;
+}
+
+.child-2{
+width: 50%;
+height: 100%;
+float: right;
+background-color: rgba(141, 128, 128, 0.63);
+background-clip: padding-box;
+padding-left: 2px;
+border-left: 0px solid white;
+margin-right: -2px
+}
+
+.child-img{
+background:none; 
+display: block; 
+margin-left: auto; 
+margin-right: auto;
+margin-top: 30px;
+color: #f8f8f8;
+}
+
+.child-label1{
+padding-bottom: -0px;
+padding-left:15px;
+color: white;
+margin-top: 15px;
+}
+.child-label2{
+padding-left:15px;
+color: white;
+margin-top: -10px;
+}
+
+.child-label3{
+padding-left:15px;
+color: white;
+margin-top: -4px;
+}
+
+.all-child-label{
+text-align: left;
+}
+
+.child-label{
+text-align: center;
+}
+}
+
+.but-img{
+height: 30px;
+float: left;
+}
+
+.but-text{
+float: left;
+margin-left: 10px;
+text-align: left; 
+}
+
+// .tabbar a[aria-selected=true] {
+//     border-top: 1px;
+//     border-style: solid;  
+//     background-color:#01ebc2;  
+//   }
+
+
+ion-content{
+// background:linear-gradient(100deg,#45362f 30%,#183330 70%);
+background:linear-gradient(100deg,#242931 30%,#181e24 70%);
+}
+
+.list-ios {
+margin: 0px !important;
+}
+ 
+.show{
+display: block !important;
+}
+
+.list-ios > .item-block:last-child, .list-ios > .item-wrapper:last-child .item-block {
+border-bottom: 0px solid #c8c7cc !important;
+}
+
+.list-ios > .item-block:first-child {
+border-top: 0px solid #c8c7cc !important;
+}
+
+.item-ios.item-block .item-inner {
+    border-bottom: 0px solid #c8c7cc !important;
+}
+
+.tabs .tabbar {
+    background-color:#13181f !important;
+}
+
+.toolbar-ios-dark .toolbar-background-ios {
+    background: #13181f !important;
+}
+
+.tabs-ios-dark .tabbar {
+    border-top:1px solid #01ebc2 ;
+}
+.tabbar a[aria-selected=true] {
+    background-color:#01ebc2; 
+}
