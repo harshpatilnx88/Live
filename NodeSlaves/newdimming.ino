@@ -6,22 +6,13 @@
 const char* ssid = "HK";
 const char* password = "harshketa";
 
-const int pwm_1_d0 = 10;
-const int pwm_2_d1 = 5;
-const int pwm_3_d8 = 15;
+const int zero_crossing_d2 = 4;
 
-const int switch_1_d7 = 13;
-const int switch_2_d5 = 10;
-const int switch_3_d6 = 12;
-
-const int pins[] = {14, 5, 15};
-const int buttons[] = {12, 10, 13};
-int buttonsState[] = {0, 0, 0};
-String states[] = {"LOW", "LOW" , "LOW"};
-int pwms[] = {128, 128, 128};
-int freeze[] = {false, false, false};
-int resp[] = {-1, -1, -1};
-
+const int pins[] = {15};
+const int buttons[] = {13};
+int buttonsState[] = {0};
+int freeze[] = {false};
+int resp[] = { -1};
 String isRegistered = "false";
 String localIP = "";
 String macAddress = "";
@@ -29,16 +20,18 @@ String masterURL = "http://192.168.0.50:3000";
 int httpCode = 200;
 ESP8266WebServer server(80);
 
+int dimming = 5;
+
 void setup () {
 
   Serial.begin(115200);
   WiFi.begin(ssid, password);
 
-  for (int i = 0; i < 3; i++) {
+  for (int i = 0; i < 1; i++) {
     pinMode(pins[i], OUTPUT);
   }
 
-  for (int i = 0; i < 3; i++) {
+  for (int i = 0; i < 1; i++) {
     pinMode(buttons[i], INPUT);
   }
 
@@ -48,10 +41,11 @@ void setup () {
     switchLoop();
   }
 
-  server.on("/receiveRequest", receiveRequest);
+  server.on("/receivePWMRequest", receivePWMRequest);
   server.on("/masterStart", masterStart);
   server.begin();
 
+  attachInterrupt(digitalPinToInterrupt(zero_crossing_d2), zero_crosss_int, RISING);
 }
 
 void loop() {
@@ -66,53 +60,45 @@ void loop() {
       Serial.print("\n localIP : " + localIP);
       Serial.print( "\n");
 
-      for (int i = 0; i < 3; i++) {
-          int buttonInput = digitalRead(buttons[i]);
-          int pwm = 128;
-          String state = "LOW";
-          if (buttonInput == HIGH) {
-            pwm = 5;
-            state = "HIGH";
-          }
+      for (int i = 0; i < 1; i++) {
+        int buttonInput = digitalRead(buttons[i]);
+        int pwm = 0;
+        String state = "LOW";
+        if (buttonInput == HIGH) {
+          pwm = 100;
+          state = "HIGH";
+        }
 
-          Serial.print("\nbuttonInput : " );
-          Serial.print(buttonInput);
-          Serial.print("\nstate : " );
-          Serial.print(state);
+        Serial.print("\nbuttonInput : " );
+        Serial.print(buttonInput);
+        Serial.print("\nstate : " );
+        Serial.print(state);
 
-          String requestQuery =  "mac_gpio=" + macAddress + "-" + pins[i] + "&ip=" + localIP + "&state=" + state + "&pwm=" + pwm + "&current_sensor=-";
-          HTTPClient http;
-          http.begin(masterURL + "/slave/new?" + requestQuery); //Specify request destination
-          httpCode = http.GET();
-          Serial.print( "*************************************************************\n");
-          Serial.print(httpCode);
-          Serial.print("\n");
-          resp[i] = httpCode;
-          
-          if (i == 2) {
-            boolean flag = true;
-            
-            for (int r = 0; r < 3; r++) {
-              if(resp[r] == -1){
-                flag = false;
-              }
-            }
-            if(flag){
-            isRegistered = "true";
-            }
-          }
+        String requestQuery =  "mac_gpio=" + macAddress + "-" + pins[i] + "&ip=" + localIP + "&state=" + state + "&pwm=" + pwm + "&current_sensor=-";
+        HTTPClient http;
+        http.begin(masterURL + "/slave/new?" + requestQuery); //Specify request destination
+        httpCode = http.GET();
+        Serial.print( "*************************************************************\n");
+        Serial.print(httpCode);
+        Serial.print("\n");
+        if (httpCode == -1) {
+          isRegistered = "false";
+        } else {
+          isRegistered = "true";
+        }
       }
     }
-    for (int i = 0; i < 3; i++) {
+
+    for (int i = 0; i < 1; i++) {
       int buttonInput = digitalRead(buttons[i]);
       int buttonState = buttonsState[i];
 
       if (buttonState != buttonInput) {
         buttonsState[i] = buttonInput;
         if ((buttonInput == HIGH)) {
-          sendRequest(pins[i], "HIGH" , i);
+          sendRequest(pins[i], "HIGH" , 100);
         } else {
-          sendRequest(pins[i], "LOW" , i);
+          sendRequest(pins[i], "LOW" , 0);
         }
       }
     }
@@ -124,42 +110,29 @@ void loop() {
   server.handleClient();
 }
 
-void sendRequest(int pin, String state, int index) {
-  int pwm = 128;
-
-  if (state == "HIGH") {
-    pwm = 5;
-  }
-
-  Serial.print("\npin : ");
-  Serial.print(pin);
-  Serial.print("\nstate : " + state);
-  Serial.print("\npwm : ");
-  Serial.print(pwm);
-
+void sendRequest(int pin, String state, int pwm) {
   String requestQuery =  "mac_gpio=" + macAddress + "-" + pin + "&ip=" + localIP + "&state=" + state + "&pwm=" + pwm + "&current_sensor=-";
   HTTPClient http;
   http.begin(masterURL + "/slave/request?" + requestQuery); //Specify request destination
   httpCode = http.GET();
 
   if (httpCode > 0) {
-    String payload = http.getString();
-    Serial.println(payload);
-    if (payload == "true") {
-
+    if (http.getString() == "true") {
       if (state == "HIGH") {
         digitalWrite(pin, HIGH);
+        dimming = 5;
       } else {
         digitalWrite(pin, LOW);
+        dimming = 128;
       }
 
-      for (int i = 0; i < 3; i++) {
+      for (int i = 0; i < 1; i++) {
         if (pins[i] == pin) {
           freeze[i] = false;
         }
       }
     } else {
-      for (int i = 0; i < 3; i++) {
+      for (int i = 0; i < 1; i++) {
         if (pins[i] == pin) {
           freeze[i] = true;
         }
@@ -168,22 +141,31 @@ void sendRequest(int pin, String state, int index) {
   }
 }
 
-void receiveRequest() {
 
+void receivePWMRequest() {
+  httpCode = 200;
   if (server.hasArg("gpio") && server.hasArg("state") && server.hasArg("pwm")) {
+
     String gpio = server.arg("gpio");
     String state = server.arg("state");
     String pwm = server.arg("pwm");
 
     if (state == "HIGH") {
-      digitalWrite(gpio.toInt(), HIGH);
+      if (pwm.toInt() > 0 && pwm.toInt() < 100) {
+        dimming = 123 - (pwm.toInt() * 1.23);
+        Serial.print(dimming);
+        Serial.print("\n");
+      } else {
+        digitalWrite(gpio.toInt(), HIGH);
+      }
     } else {
       digitalWrite(gpio.toInt(), LOW);
+      dimming = 128;
     }
+
     server.send(200, "text/plain", "receiveRequest is done :-)");
   }
 }
-
 
 void masterStart() {
   httpCode = 200;
@@ -192,7 +174,7 @@ void masterStart() {
 }
 
 void switchLoop() {
-  for (int i = 0; i < 3; i++) {
+  for (int i = 0; i < 1; i++) {
     int buttonInput = digitalRead(buttons[i]);
     int buttonState = buttonsState[i];
 
@@ -204,5 +186,16 @@ void switchLoop() {
         digitalWrite(pins[i], LOW);
       }
     }
+  }
+}
+
+void zero_crosss_int()  //function to be fired at the zero crossing to dim the light
+{
+  if (dimming > 5 && dimming < 128) {
+    int dimtime = (75 * dimming);  // For 60Hz =>65
+    delayMicroseconds(dimtime);    // Wait till firing the TRIAC
+    digitalWrite(pins[0], HIGH);   // Fire the TRIAC
+    delayMicroseconds(10);         // triac On propogation delay
+    digitalWrite(pins[0], LOW);    // No longer trigger the TRIAC (the next zero crossing will swith it off) TRIAC
   }
 }
